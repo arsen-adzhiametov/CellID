@@ -41,6 +41,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bugsense3.0.6" level="project" />
     <orderEntry type="library" name="crittercism_v3_0_6_sdkonly" level="project" />
+    <orderEntry type="library" name="bugsense3.0.7" level="project" />
   </component>
 </module>
 
