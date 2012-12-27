@@ -5,9 +5,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.telephony.CellLocation;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -44,18 +46,21 @@ public class GsmRegisterService extends Service {
 
         cellLocation = (GsmCellLocation) telephonyManager.getCellLocation();
 
-        serviceRunningNotification = createServiceActiveNotification();
+        if (cellLocation != null) {
+            serviceRunningNotification = createServiceActiveNotification("GSM location testing","cell: " + cellLocation.getCid());
+        } else {
+            serviceRunningNotification = createServiceActiveNotification("GSM location testing","no signal");
+        }
+
         startForeground(MAIN_SERVICE_NOTIFICATION_ID, serviceRunningNotification);
 
        // Log.d(LOG_TAG, "in init: " + cellLocation.toString());
-
         stopForeground(true);
 
         return super.onStartCommand(intent, flags, startId);
     }
 
     private void reloadData() {
-
 
         tempLocation = (GsmCellLocation) telephonyManager.getCellLocation();
 
@@ -82,17 +87,17 @@ public class GsmRegisterService extends Service {
         public void onCellLocationChanged(CellLocation location) {
             super.onCellLocationChanged(location);
             reloadData();
+            if (MetroStations.getMetroStations().containsKey(cellLocation.getCid()) && !"true".equals(load("isUnderground"))) {
+                createServiceActiveNotification("Subway detected", "It seems you are in the metro");
+                save("isUnderground", "true");
+            } else if (!MetroStations.getMetroStations().containsKey(cellLocation.getCid()) && "true".equals(load("isUnderground"))){
+                createServiceActiveNotification("Out of subway", "It seems you are out of metro");
+                save("isUnderground", "false");
+            }
         }
     }
 
-    private Notification createServiceActiveNotification() {
-        String title = "GSM location testing";
-        String text;
-        if (cellLocation != null) {
-            text = "cell: " + cellLocation.getCid();
-        } else {
-            text = "no signal";
-        }
+    private Notification createServiceActiveNotification(String title, String text) {
 
         Notification notification = new Notification(R.drawable.ic_stat_example, text, System.currentTimeMillis());
         notification.flags = Notification.FLAG_NO_CLEAR;
@@ -101,5 +106,16 @@ public class GsmRegisterService extends Service {
         notification.setLatestEventInfo(this, title, text, launchIntent);
 
         return notification;
+    }
+
+    public void save(String key, String value){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+    public String load(String key){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString(key,"");
     }
 }

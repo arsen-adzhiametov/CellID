@@ -23,6 +23,7 @@
             android:id="@+id/lac"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textColor="#ff0000"
             />
     <Button
             android:id="@+id/stop"

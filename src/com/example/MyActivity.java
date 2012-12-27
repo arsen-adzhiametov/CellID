@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.bugsense.trace.BugSenseHandler;
 import com.crittercism.app.Crittercism;
+
 import java.util.Calendar;
 
 public class MyActivity extends Activity {
@@ -36,14 +37,15 @@ public class MyActivity extends Activity {
 
         textCID = (TextView) findViewById(R.id.cid);
         textLAC = (TextView) findViewById(R.id.lac);
-        Button stopButton = (Button)findViewById(R.id.stop);
-        stopButton.setOnClickListener(new View.OnClickListener(){
+        Button stopButton = (Button) findViewById(R.id.stop);
+        stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this, GsmRegisterService.class);
                 MyActivity.this.stopService(intent);
                 MyActivity.this.finish();
-            }});
+            }
+        });
 
         Intent newintent = new Intent(this, GsmRegisterService.class);
         PendingIntent pi = PendingIntent.getService(MyActivity.this, 0, newintent, 0);
@@ -72,8 +74,13 @@ public class MyActivity extends Activity {
     }
 
     private void setText(int cid, int lac) {
-        textCID.setText("gsm cell id: " + String.valueOf(cid));
-        textLAC.setText("gsm location area code: " + String.valueOf(lac));
+        if (MetroStations.getMetroStations().containsKey(cid)) {
+            textCID.setText("gsm cell id: " + String.valueOf(cid));
+            textLAC.setText(MetroStations.getMetroStations().get(cid) + " station");
+        } else {
+            textCID.setText("gsm cell id: " + String.valueOf(cid));
+            textLAC.setText("gsm location area code: " + String.valueOf(lac));
+        }
     }
 
     private class GsmCellChangingListener extends PhoneStateListener {

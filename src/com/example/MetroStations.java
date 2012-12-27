@@ -4,28 +4,28 @@ import java.util.HashMap;
 
 public class MetroStations {
 
-    private static HashMap<String, Integer> metroStations;
+    private static HashMap<Integer, String> metroStations;
 
     static {
 
-        metroStations = new HashMap<String, Integer>();
+        metroStations = new HashMap<Integer, String>();
 
-        metroStations.put("Academgorodok", 29931);
-        metroStations.put("Zhitomirskaya", 29930);
-        metroStations.put("Svyatoshin", 29929);
-        metroStations.put("Nyvky", 29928);
-        metroStations.put("Beresteyskaya", 29927);
-        metroStations.put("Shulyavskaya", 29926);
-        metroStations.put("Polytechnicheskiy Universitet", 29925);
-        metroStations.put("Vokzalnaya", 29924);
-        metroStations.put("Universitet", 29923);
-        metroStations.put("Teatralnaya", 29922);
-        metroStations.put("Khreshatyk", 29921);
-        metroStations.put("Arsenalnaya", 29920);
+        metroStations.put(29931,"Academgorodok");
+        metroStations.put(29930, "Zhitomirskaya");
+        metroStations.put(29929,"Svyatoshin");
+        metroStations.put(29928,"Nyvky");
+        metroStations.put(29927,"Beresteyskaya");
+        metroStations.put(29926,"Shulyavskaya");
+        metroStations.put(29925,"Polytechnicheskiy Universitet");
+        metroStations.put(29924,"Vokzalnaya");
+        metroStations.put(29923,"Universitet");
+        metroStations.put(29922,"Teatralnaya");
+        metroStations.put(29921,"Khreshatyk");
+        metroStations.put(29920,"Arsenalnaya");
 
     }
 
-    public static HashMap<String, Integer> getMetroStations() {
+    public static HashMap<Integer, String> getMetroStations() {
         return metroStations;
     }
 }
